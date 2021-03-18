@@ -167,194 +167,170 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
        });
    });
    ```
-2. Ejecutar el comando `npm test` para correr la prueba. Una vez finalice y si todo está bien veremos que la prueba se puso en verde:
+2. Ejecutar el comando `npm run test:open` para correr la prueba. Una vez finalice y si todo está bien veremos que la prueba se puso en verde:
 ![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/google-spec.png).
 
 ## 5. Configurando las pruebas con Typescript
 
 1. Instalar las dependencias necesarias para la transpilación de nuestras pruebas escritas en Typescript a Javascript por medio de webpack y un preprocesador de cypress para Typescript.
-
-  ```bash
-  npm i -D webpack @cypress/webpack-preprocessor ts-loader typescript
-  ```
+   ```bash
+   npm i -D webpack @cypress/webpack-preprocessor ts-loader typescript
+   ```
 
 2. Crear el archivo tsconfig.json en la raiz del proyecto y copiar dentro de este la siguiente configuración:
-
-```javascript
-{
-    "compilerOptions": {
-        "target": "es5",
-        "module": "commonjs",
-        "skipLibCheck": true,
-        "strict": true,
-        "types": [
-            "cypress"
-        ]
-    },
-    "include": [
-        "cypress/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules/"
-    ]
-}
-```
+   ```javascript
+   {
+       "compilerOptions": {
+           "target": "es5",
+           "module": "commonjs",
+           "skipLibCheck": true,
+           "strict": true,
+           "types": [
+               "cypress"
+           ]
+       },
+       "include": [
+           "cypress/**/*.ts"
+       ],
+       "exclude": [
+           "node_modules/"
+       ]
+   }
+   ```
 
 3. Posteriormente, crear el archivo de configuración de webpack `webpack.config.js` en la raiz del proyecto y agregar las siguientes lineas para realizar la transpilación de nuestros archivos `.ts` excluyendo las dependencias instaladas en `node_modules`:
-
-```javascript
-module.exports = {
-    mode: 'development',
-    devtool: 'eval-source-map',
-    resolve: {
-      extensions: ['.ts', '.js'],
-    },
-    module: {
-      rules: [
-        {
-
-          test: /\.ts$/,
-          exclude: [/node_modules/],
-          use: [
-            {
-              loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
-              },
-            },
-          ],
-        },
-      ],
-    },
-  }
-```
+   ```javascript
+   module.exports = {
+       mode: 'development',
+       devtool: 'eval-source-map',
+       resolve: {
+         extensions: ['.ts', '.js'],
+       },
+       module: {
+         rules: [
+           {
+   
+             test: /\.ts$/,
+             exclude: [/node_modules/],
+             use: [
+               {
+                 loader: 'ts-loader',
+                 options: {
+                   transpileOnly: true,
+                 },
+               },
+             ],
+           },
+         ],
+       },
+     }
+   ```
 
 4. Para cargar el plugin del preprocesador en cypress e iniciar la transpilación al correr las pruebas agregamos las siguientes lineas en el archivo `cypress/plugins/index.js`
-
-```javascript
-/// <reference types="cypress" />
-
-const wp = require('@cypress/webpack-preprocessor')
-
-/**
- * @type {Cypress.PluginConfig}
- */
-module.exports = (on, config) => {
-  const options = {
-    webpackOptions: require('../../webpack.config'),
-  }
-
-  on('file:preprocessor', wp(options))
-}
-```
+   ```javascript
+   /// <reference types="cypress" />
+   
+   const wp = require('@cypress/webpack-preprocessor')
+   
+   /**
+    * @type {Cypress.PluginConfig}
+    */
+   module.exports = (on, config) => {
+     const options = {
+       webpackOptions: require('../../webpack.config'),
+     }
+   
+     on('file:preprocessor', wp(options))
+   }
+   ```
 
 5. Cambiar la extensión de nuestra prueba `google.spec.js` por `google.spec.ts`y ejecutar el comando de pruebas para comprobar que la transpilación se ejecuta correctamente al correr las pruebas
-
-```bash
-npm test
-```
+   ```bash
+   npm run test:open
+   ```
 
 ## 6. Análisis de código estatico
 
 1. Para realizar el análisis de código estatico usaremos la herramienta EsLint para validar un conjunto de reglas sobre el código de pruebas y mantener un estilo consistente. Para esto se debe instalar Eslint como dependecia de desarrollo, luego iniciar la configuración del linter y seguimos los pasos que aparecen en consola (ver gif):
-
-```bash
-npm install eslint --save-dev
-npx eslint --init
-```
-
-![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/eslint-init.gif).
+   ```bash
+   npm install eslint --save-dev
+   npx eslint --init
+   ```
+   ![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/eslint-init.gif).
 2. Instalar una extension del linter para cypress que contiene reglas de estilo siguiendo las buenas practicas que sugiere cypress:
-
-```bash
-npm install eslint-plugin-cypress --save-dev
-```
-
+   ```bash
+   npm install eslint-plugin-cypress --save-dev
+   ```
 3. Luego agregar el plugin de cypress y las reglas en el archivo eslintrc.js
-
-```javascript
-...
-    "plugins": [
-        "@typescript-eslint",
-        "cypress"
-    ],
-    "rules": {
-        "quotes": ["error", "double"],
-        "cypress/no-assigning-return-values": "error",
-        "cypress/no-unnecessary-waiting": "error",
-        "cypress/assertion-before-screenshot": "warn",
-        "cypress/no-force": "warn"
-    }
-...
-```
-
+   ```javascript
+   ...
+       "plugins": [
+           "@typescript-eslint",
+           "cypress"
+       ],
+       "rules": {
+           "quotes": ["error", "double"],
+           "cypress/no-assigning-return-values": "error",
+           "cypress/no-unnecessary-waiting": "error",
+           "cypress/assertion-before-screenshot": "warn",
+           "cypress/no-force": "warn"
+       }
+   ...
+   ```
 4. Posteriormente modificamos el script test:open en el "package.json" para ejecutar la verificación de código estático antes de correr las pruebas:
-
-```json
-"scripts": {
-    "test:open": "npm run lint && cypress open",
-    "lint": "eslint ./cypress/integration/**/*.ts",
-    "lint:fix": "npm run lint -- --fix"
-},
-```
-
+   ```json
+   "scripts": {
+       "test:open": "npm run lint && cypress open",
+       "lint": "eslint ./cypress/integration/**/*.ts",
+       "lint:fix": "npm run lint -- --fix"
+   },
+   ```
 5. Ejecutamos las pruebas por corriendo el comando test:open
-
-```bash
-npm run test:open
-```
-
-Nota: En caso de tener errores, algunos de ellos son posible arreglarlos autoáticamente añadiendo el argumento --fix, es decir, usamos `npm run lint -- --fix`.
+   ```bash
+   npm run test:open
+   ```
+   Nota: En caso de tener errores, algunos de ellos son posible arreglarlos autoáticamente añadiendo el argumento --fix, es decir, usamos `npm run lint -- --fix`.
 
 ## 7. Configurar Integración Continua (CI)
 
 En esta sección se configura la integración continua por medio de Travis, lo cual nos permitirá correr nuestras pruebas en un servidor remoto y validar continuamente que los cambios que vamos a ingresar a nuestra aplicación no han afectado el funcionamiento correcto.
 
 1. Inicialmente crear el siguiente script en el package.json para ejecutar todas las pruebas de cypress/integration/ sin tener que levantar el explorador. A esto le llamamos headless mode:
-
-```javascript
-"scripts": {
-    ...
-    "test": "cypress run"
-    ...
-  },
-```
-
+   ```javascript
+   "scripts": {
+       ...
+       "test": "cypress run"
+       ...
+     },
+   ```
 2. Luego crear el archivo `.nvmrc` para indicarle al CI que versión de nodeJS debe usar para instalar la aplicación y correr las pruebas. Ingresar la versión de node en el archivo.
-
-```text
-v10.16.0
-```
+   ```text
+   v10.16.0
+   ```
 
 3. Para indicar la configuración de Travis se debe crear el archivo `.travis.yml` e ingresar la siguiente especificación:
+   ```yml
+   language: node_js
 
-```yml
-language: node_js
-
-directories:
-- node_modules
-notifications:
-email: false
-branches:
-except:
-- "/^v\\d+\\.\\d+\\.\\d+$/"
-script:
-  - npm test
-
-```
-
-*Nota: Se agrega el script `npm test` para ejecutar todas las pruebas*
-
+   directories:
+   - node_modules
+   notifications:
+   email: false
+   branches:
+   except:
+   - "/^v\\d+\\.\\d+\\.\\d+$/"
+   script:
+     - npm test
+   ```
+   *Nota: Se agrega el script `npm test` para ejecutar todas las pruebas*
 4. Debido a que cypress por default graba videos de la ejecución de las pruebas es util desactivar esta funcionalidad para disminuir el tiempo de ejecución y el uso de recursos en el servidor del CI. Para esto se debe ingresar la siguiente configuración en el archivo `cypress.json`
-
-```json
-{
-  ...
-  "video": false
-  ...
-}
-```
-
+   ```json
+   {
+     ...
+     "video": false
+     ...
+   }
+   ```
 5. Finalmente subir los cambios al repositorio y crear un Pull Request. Se ejecutaran las pruebas en el servidor que provee Travis y se mostrara los resultados de la ejecución en el PR.
 
 ## 8 Selectores CSS
