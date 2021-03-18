@@ -52,11 +52,11 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    git add .gitignore
    git commit -m "first commit"
    git remote add origin https://github.com/<usuario>/cypress-training.git
-   git push -u origin master
+   git push -u origin master (o main)
    ```
-5. Proteger la rama `master` para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
+5. Proteger la rama `master` (o main) para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
 
-   Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `master` en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
+   Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `master` (o main) en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
 ![branch rules](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/branch-rules.png)
 6. Añadir como colaboradores a:
    * [holgiosalos](https://github.com/holgiosalos)
