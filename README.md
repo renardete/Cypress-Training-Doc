@@ -323,7 +323,9 @@ En esta sección se configura la integración continua por medio de Travis, lo c
      - npm test
    ```
    *Nota: Se agrega el script `npm test` para ejecutar todas las pruebas*
-4. Debido a que cypress por default graba videos de la ejecución de las pruebas es util desactivar esta funcionalidad para disminuir el tiempo de ejecución y el uso de recursos en el servidor del CI. Para esto se debe ingresar la siguiente configuración en el archivo `cypress.json`
+4. Habilitar en Travis en el repositorio, primeros 3 pasos de [esta guía](https://docs.travis-ci.com/user/getting-started/)
+   ![image](https://user-images.githubusercontent.com/10209180/112709102-6cf8bd00-8e84-11eb-9fa8-e0e6fc01f1f1.png)
+5. Debido a que cypress por default graba videos de la ejecución de las pruebas es util desactivar esta funcionalidad para disminuir el tiempo de ejecución y el uso de recursos en el servidor del CI. Para esto se debe ingresar la siguiente configuración en el archivo `cypress.json`
    ```json
    {
      ...
@@ -342,44 +344,38 @@ En esta sección se realiza un flujo para comprar una camiseta en la tienda de r
 Vamos a realizar los siguientes pasos, para automatizar el flujo de compra:
 
 1. Primero crear el archivo `buy-shirt.spec.ts` e incluir el siguiente codigo:
+   ```typescript
 
-```typescript
+   describe('Buy a t-shirt', () => {
 
-describe('Buy a t-shirt', () => {
+     it('then the t-shirt should be bought', () => {
+       cy.visit('http://automationpractice.com/')
+       cy.get('#block_top_menu > ul > li:nth-child(3) > a').click()
+       cy.get('#center_column a.button.ajax_add_to_cart_button.btn.btn-default').click()
+       cy.get('[style*="display: block;"] .button-container > a').click()
+       cy.get('.cart_navigation span').click()
 
-  it('then the t-shirt should be bought', () => {
-    cy.visit('http://automationpractice.com/')
-    cy.get('#block_top_menu > ul > li:nth-child(3) > a').click()
-    cy.get('#center_column a.button.ajax_add_to_cart_button.btn.btn-default').click()
-    cy.get('[style*="display: block;"] .button-container > a').click()
-    cy.get('.cart_navigation span').click()
+       cy.get('#email').type('aperdomobo@gmail.com')
+       cy.get('#passwd').type('WorkshopProtractor')
 
-    cy.get('#email').type('aperdomobo@gmail.com')
-    cy.get('#passwd').type('WorkshopProtractor')
+       // Debes completar la prueba ...
 
-    // Debes completar la prueba ...
-
-    cy.get('#center_column > div > p > strong')
-      .should('have.text', 'Your order on My Store is complete.')
-  });
-});
-```
-
-Usa como apoyo el gif para conocer mas del flujo esperado, extrae los css selector de la UI manualmente, termina la prueba y correla local.
-
-![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/test-flow-buy-shirt.gif)
-
+       cy.get('#center_column > div > p > strong')
+         .should('have.text', 'Your order on My Store is complete.')
+     });
+   });
+   ```
+   Usa como apoyo el gif para conocer mas del flujo esperado, extrae los css selector de la UI manualmente, termina la prueba y correla local.
+   ![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/test-flow-buy-shirt.gif)
 3. En algunos la red u otros factores externos a la prueba pueden afectar los tiempos de espera, en el archivo de configuración de cypress `cypress.json` agrega los siguientes atributos y modificalos hasta que las pruebas pasen:
-
-```json
-{
-  ...
-    "defaultCommandTimeout": 20000,
-    "responseTimeout": 20000
-  ...
-}
-```
-
+   ```json
+   {
+     ...
+       "defaultCommandTimeout": 20000,
+       "responseTimeout": 20000
+     ...
+   }
+   ```
 4. Para finalizar sube tus cambios al repositorio y crea un PR.
 
 ## 9 Page Object Model (POM)
@@ -389,63 +385,57 @@ Page Object Model es un patron para mejorar la mantenibilidad de las pruebas ya 
 A continuación realizar la transformación a POM, por medio de los siguientes pasos:
 
 1. Crear el archivo `cypress/page/menu-content.page.ts` y agregar el siguiente código:
+   ```javascript
+   class MenuContentPage {
+       private tShirtMenu: string;
+       private menuContentPageURL: string
 
-```javascript
-class MenuContentPage {
-    private tShirtMenu: string;
-    private menuContentPageURL: string
+       constructor() {
+           this.tShirtMenu = '#block_top_menu > ul > li:nth-child(3) > a';
+           this.menuContentPageURL = 'http://automationpractice.com/'
+       }
 
-    constructor() {
-        this.tShirtMenu = '#block_top_menu > ul > li:nth-child(3) > a';
-        this.menuContentPageURL = 'http://automationpractice.com/'
-    }
+       public visitMenuContentPage(): void {
+           cy.visit(this.menuContentPageURL)
+       }
 
-    public visitMenuContentPage(): void {
-        cy.visit(this.menuContentPageURL)
-    }
+       public goToTShirtMenu(): void {
+           cy.get(this.tShirtMenu).click()
+       }
 
-    public goToTShirtMenu(): void {
-        cy.get(this.tShirtMenu).click()
-    }
-
-}
-export { MenuContentPage }
-```
+   }
+   export { MenuContentPage }
+   ```
 
 2. Posteriormente crear el archivo `cypress/page/index.js` para usar como archivo de salida de todos los page object:
+   ```javascript
+   export { MenuContentPage } from './menu-content.page'
 
-```javascript
-export { MenuContentPage } from './menu-content.page'
-
-```
+   ```
 
 3. Luego modificar el archivo `buy-tshirt.spec.ts` para utilizar el POM que acabamos de crear en la prueba:
+   ```javascript
+   import { MenuContentPage } from '../page/index'
 
-```javascript
-import { MenuContentPage } from '../page/index'
+   const menuContentPage = new MenuContentPage()
 
-const menuContentPage = new MenuContentPage()
+   describe('Buy a t-shirt', () => {
 
-describe('Buy a t-shirt', () => {
+     it('then should be bought a t-shirt', () => {
+       menuContentPage.visitMenuContentPage()
+       menuContentPage.goToTShirtMenu()
+       cy.get('[style*="display: block;"] .button-container > a').click()
+       cy.get('.cart_navigation span').click()
 
-  it('then should be bought a t-shirt', () => {
-    menuContentPage.visitMenuContentPage()
-    menuContentPage.goToTShirtMenu()
-    cy.get('[style*="display: block;"] .button-container > a').click()
-    cy.get('.cart_navigation span').click()
+       // El resto del flujo de la prueba....
 
-    // El resto del flujo de la prueba....
-
-  });
-});
-```
+     });
+   });
+   ```
 
 4. Posteriormente, crear el resto de page object y reemplazarlos en la prueba. Los nombres de los page object son: **products-list.page.ts**, **shoping-cart.page.ts**, **login.page.ts**, **address-step.page.ts**, **shipping-step.page.ts** y **payment-step.page.ts**
-
-`tip:` Agrega los page object al archivo 'page/index.ts' para facilitar el import de cada page object en las pruebas.
-
+   `tip:` Agrega los page object al archivo 'page/index.ts' para facilitar el import de cada page object en las pruebas.
 5. Ejecute las pruebas y verifica que pasen. Si alguna falla modificala usando los css locators y el tiempo de espera configurado hasta que pasen.
-
 6. Cree un PR y solicitie revisión del punto anterior.
 
 ## 10. Mejorando los selectores
