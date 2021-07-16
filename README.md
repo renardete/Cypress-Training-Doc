@@ -57,7 +57,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
 5. Proteger la rama `master` (o main) para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
 
    Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `master` (o `main`) en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
-![branch rules](TBD)
+![branch rules](https://github.com/renardete/Cypress-Training-Doc/blob/main/BranchRules.png)
 6. Añadir como colaboradores a:
    * [saradrada](https://github.com/saradrada)
    * [holgiosalos](https://github.com/holgiosalos)
