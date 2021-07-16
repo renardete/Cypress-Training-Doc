@@ -56,19 +56,22 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    ```
 5. Proteger la rama `master` (o main) para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
 
-   Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `master` (o main) en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
-![branch rules](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/branch-rules.png)
+   Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `master` (o `main`) en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
+![branch rules](TBD)
 6. Añadir como colaboradores a:
+   * [saradrada](https://github.com/saradrada)
    * [holgiosalos](https://github.com/holgiosalos)
-   * [Valeryibarra](https://github.com/Valeryibarra)
-   * [renardete](https://github.com/renardete)
+   * [garzuzo](https://github.com/garzuzo)
+   * [danielgalvis98](https://github.com/danielgalvis98)
+   * [leonleo997](https://github.com/leonleo997)
+   * [manuelq12](https://github.com/manuelq12)
 
 ## 2. Configuracion inicial del proyecto
 1. Instalar la versión `v14.16.0` de NodeJS. Nota: Recomendamos usar [nvm](https://github.com/nvm-sh/nvm) como manejador de versiones.
 2. Crear una nueva rama local ejecutando por consola `git checkout -b setup`.
 3. Crear una carpeta en la raíz del proyecto llamada **.github** con un archivo llamado **CODEOWNERS** (sin extensión) con lo siguiente:
    ```js
-   * @renardete @holgiosalos @Valeryibarra
+   * @saradrada @garzuzo @holgiosalos @danielgalvis98 @leonleo997 @manuelq12
    ```
 4. Ejecutar en consola `npm init` y colocar la siguiente información:
    | Parámetro          | Valor                                         |
