@@ -42,6 +42,8 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    ```
    ...
    cypress/integration/examples/*
+   cypress/integration/1-getting-started/*
+   cypress/integration/2-advanced-examples/*
    ...
    ```
 4. A continuación realice el primer commit y suba los cambios a nuestro repositorio remoto de github, digitando los siguientes comandos en tu consola favorita, cada linea es un comando distinto:
