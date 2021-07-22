@@ -173,7 +173,7 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
    });
    ```
 2. Ejecutar el comando `npm run test:open` para correr la prueba. Una vez finalice y si todo está bien veremos que la prueba se puso en verde:
-![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/google-spec.png).
+![google spec result](https://github.com/renardete/Cypress-Training-Doc/blob/main/google-spec-result.png).
 
 ## 5. Configurando las pruebas con Typescript
 
