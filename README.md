@@ -346,8 +346,23 @@ En esta sección se realiza un flujo para comprar una camiseta en la tienda de r
 
 :scroll: Un poco de teoria: Para interactuar con los elementos del DOM se pueden usar varios mecanismos como CSS selectors, XPATH, jquery+css. Cada uno de estos tiene diferentes beneficios como su performance, legibilidad o la complejidad de la query del elemento con el cual queremos interactuar. Usualmente los CSS selector suelen ser mas rapidos y confiables en la mayoria de navegadores sin embargo lo XPATH permiten realizar busquedas de elementos mas complejas. Te recomendamos investigar las diferencias entre ambos tipos de selectores teniendo en cuenta factores como: manteniblidad, flexiblidad y velocidad de busqueda de un elemento.
 
-Vamos a realizar los siguientes pasos, para automatizar el flujo de compra:
+Vamos a automatizar el flujo de compra, que consta de los siguientes pasos:
+1. Abrir la pagina web automation practice
+2. Ir al menu de "T-Shirts"
+3. Agregar la primera blusa al carrito de compra
+4. Click en el boton "Proceed to Checkout" de la ventana emergente
+5. Click en el boton "Proceed to Checkout" de el "Summary"
+6. Escribir el correo
+7. Escribir la contraseña
+8. Click en el boton de "Sign In"
+9. Click en el boton "Proceed to Checkout" del paso en el que se provee la direccion de entrega
+10. Aceptar terminos y condiciones
+11. Click en el boton "Proceed to Checkout" de el paso de Envio
+12. Click en la opcion "Pay by bank wire"
+13. Click en el boton the confirmar orden
+14. Verificar que en el paso final, se muestra el titulo "Your order on My Store is complete."
 
+Para automatizar el proceso anterior, vamos a realizar los siguietes pasos:
 1. Primero crear el archivo `buy-shirt.spec.ts` e incluir el siguiente codigo:
    ```typescript
 
@@ -363,15 +378,18 @@ Vamos a realizar los siguientes pasos, para automatizar el flujo de compra:
        cy.get('#email').type('aperdomobo@gmail.com')
        cy.get('#passwd').type('WorkshopProtractor')
 
-       // Debes completar la prueba ...
+       // Debes completar la prueba ... implementa los pasos 8 al 13, del proceso de compra
 
        cy.get('#center_column > div > p > strong')
          .should('have.text', 'Your order on My Store is complete.')
      });
    });
    ```
-   Usa como apoyo el gif para conocer mas del flujo esperado, extrae los css selector de la UI manualmente, termina la prueba y correla local.
-   ![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/test-flow-buy-shirt.gif)
+   Usa como apoyo las siguientes imagenes para conocer mas del flujo esperado, extrae los selectores de la UI manualmente, termina la prueba y correla local.
+   Pasos a implementar:
+   ![pasos-a-implementar](https://github.com/renardete/Cypress-Training-Doc/blob/main/guia-implementacion.png)
+   Proceso de Compra:
+   ![gif-proceso-compra](https://github.com/renardete/Cypress-Training-Doc/blob/main/proceso-compra.gif)
 3. En algunos la red u otros factores externos a la prueba pueden afectar los tiempos de espera, en el archivo de configuración de cypress `cypress.json` agrega los siguientes atributos y modificalos hasta que las pruebas pasen:
    ```json
    {
