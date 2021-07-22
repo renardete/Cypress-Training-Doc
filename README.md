@@ -261,7 +261,7 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
    npm install eslint --save-dev
    npx eslint --init
    ```
-   ![google spec result](https://github.com/AgileTestingColombia/cypress-training/blob/media/images/eslint-init.gif).
+   ![google spec result](https://github.com/renardete/Cypress-Training-Doc/blob/main/eslint-config.png).
 2. Instalar una extension del linter para cypress que contiene reglas de estilo siguiendo las buenas practicas que sugiere cypress:
    ```bash
    npm install eslint-plugin-cypress --save-dev
