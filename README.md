@@ -269,17 +269,20 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
 3. Luego agregar el plugin de cypress y las reglas en el archivo eslintrc.js
    ```javascript
    ...
-       "plugins": [
-           "@typescript-eslint",
-           "cypress"
-       ],
-       "rules": {
-           "quotes": ["error", "double"],
-           "cypress/no-assigning-return-values": "error",
-           "cypress/no-unnecessary-waiting": "error",
-           "cypress/assertion-before-screenshot": "warn",
-           "cypress/no-force": "warn"
-       }
+     plugins: [
+       '@typescript-eslint',
+       "cypress"
+     ],
+     "rules": {
+       "quotes": ["error", "double"],
+       "cypress/no-assigning-return-values": "error",
+       "cypress/no-unnecessary-waiting": "error",
+       "cypress/assertion-before-screenshot": "warn",
+       "cypress/no-force": "warn"
+     },
+     "env": {
+       "cypress/globals": true
+     }
    ...
    ```
 4. Posteriormente modificamos el script test:open en el "package.json" para ejecutar la verificación de código estático antes de correr las pruebas:
