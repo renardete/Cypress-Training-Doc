@@ -1,4 +1,5 @@
 # Workshop Cypress
+[![Continous integration](https://github.com/renardete/Cypress-Workshop/actions/workflows/main.yml/badge.svg)](https://github.com/renardete/Cypress-Workshop/actions/workflows/main.yml)
 
 Bienvenido al Workshop de Cypress!!! Durante el taller exploraremos los conocimientos necesarios para construir pruebas automaticas de la interfaz gráfica (GUI) usando Cypress. Durante el taller exploraremos la configuración de un proyecto desde cero, prepararlo para un proceso de integración continua por medio de Travis CI, interactuar con diferentes componentes web y mucho mas.
 
@@ -13,7 +14,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
 1. Para cada ejercicio crear una rama (Investiga: *gitflow naming conventions* )
 2. Crea un Pull Request por cada punto (**Recuerda las interacciones como comentarios en ingles**)
 3. Despues de que se recibe aprobación de cada punto se debe hacer merge de la rama, utilizando squash.
-4. Antes de empezar un nuevo punto se debe hacer pull de master/main para asegurarnos que tenemos los ultimos cambios del anterior punto.
+4. Antes de empezar un nuevo punto se debe hacer pull de main para asegurarnos que tenemos los ultimos cambios del anterior punto.
 
 ## Tabla de contenidos
 1. [Creación y configuración del repositorio](#1-creaci-n-y-configuraci-n-del-repositorio)
@@ -22,7 +23,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
 1. [Creando la primera prueba](#4-creando-la-primera-prueba)
 1. [Configurando las pruebas con Typescript](#5-configurando-las-pruebas-con-typescript)
 1. [Análisis de código estatico](#6-an-lisis-de-c-digo-estatico)
-1. [Configurar Integración Continua (CI)](#7-configurar-integraci-n-continua--ci-)
+1. [Configurar Integración Continua (CI)](#7-configurar-integracion-continua-ci)
 1. [Selectores CSS](#8-selectores-css)
 1. [Page Object Model (POM)](#9-page-object-model--pom-)
 1. [Mejorando los selectores](#10-mejorando-los-selectores)
@@ -42,8 +43,6 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    ```
    ...
    cypress/integration/examples/*
-   cypress/integration/1-getting-started/*
-   cypress/integration/2-advanced-examples/*
    ...
    ```
 4. A continuación realice el primer commit y suba los cambios a nuestro repositorio remoto de github, digitando los siguientes comandos en tu consola favorita, cada linea es un comando distinto:
@@ -54,26 +53,23 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    git add .gitignore
    git commit -m "first commit"
    git remote add origin https://github.com/<usuario>/cypress-training.git
-   git push -u origin master (o main)
+   git push -u origin main
    ```
-5. Proteger la rama `master` (o main) para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
+5. Proteger la rama `main` para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
 
-   Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `master` (o `main`) en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
-![branch rules](https://github.com/renardete/Cypress-Training-Doc/blob/main/BranchRules.png)
+   Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `main` en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
+![branch rules](https://github.com/renardete/Cypress-Workshop/blob/master/media/branch_protection_configuration.png?raw=true)
 6. Añadir como colaboradores a:
-   * [saradrada](https://github.com/saradrada)
    * [holgiosalos](https://github.com/holgiosalos)
-   * [garzuzo](https://github.com/garzuzo)
-   * [danielgalvis98](https://github.com/danielgalvis98)
-   * [leonleo997](https://github.com/leonleo997)
-   * [manuelq12](https://github.com/manuelq12)
+   * [Valeryibarra](https://github.com/Valeryibarra)
+   * [renardete](https://github.com/renardete)
 
 ## 2. Configuracion inicial del proyecto
 1. Instalar la versión `v14.16.0` de NodeJS. Nota: Recomendamos usar [nvm](https://github.com/nvm-sh/nvm) como manejador de versiones.
 2. Crear una nueva rama local ejecutando por consola `git checkout -b setup`.
 3. Crear una carpeta en la raíz del proyecto llamada **.github** con un archivo llamado **CODEOWNERS** (sin extensión) con lo siguiente:
    ```js
-   * @saradrada @garzuzo @holgiosalos @danielgalvis98 @leonleo997 @manuelq12
+   * @renardete @holgiosalos @Valeryibarra
    ```
 4. Ejecutar en consola `npm init` y colocar la siguiente información:
    | Parámetro          | Valor                                         |
@@ -94,9 +90,9 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    git push origin setup
    ```
 5. Crear un pull request (PR), asignarle los revisores y esperar la aprobación o comentarios de mejora (en este caso deberá hacer los ajustes requeridos, subir los cambios y esperar nuevamente la aprobación) de los revisores . Si no sabe cómo realizarlo, le recomendamos leer el siguiente artículo [instrucciones](https://help.github.com/articles/creating-a-pull-request/).
-6. Una vez hemos obtenido la aprobación de los revisores, realizar el merge a master seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local 'master' realice el pull para traer los cambios mergeados en el PR.
+6. Una vez hemos obtenido la aprobación de los revisores, realizar el merge a main seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local 'main' realice el pull para traer los cambios mergeados en el PR.
    ```bash
-   git checkout master
+   git checkout main
    git pull
    ```
 
@@ -111,41 +107,8 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    npm run test
    ```
 3. Presionar el botón `Run integration specs` para ejecutar todas las pruebas de ejemplo. Es aquí donde vemos cómo funciona la magia de cypress. Una vez finalice, cerramos la ventana de cypress.
-4. Observar que se crea una carpeta llamada **cypress** con la siguiente [estructura](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests.html#Folder-Structure):
-   ```
-   /cypress
-     /fixtures
-       - example.json
+4. Observar que se crea una carpeta llamada **cypress** con la siguiente estructura ([Extra info!!](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests.html#Folder-Structure)):  
 
-     /integration
-       /examples
-         - actions.spec.js
-         - aliasing.spec.js
-         - assertions.spec.js
-         - connectors.spec.js
-         - cookies.spec.js
-         - cypress_api.spec.js
-         - files.spec.js
-         - local_storage.spec.js
-         - location.spec.js
-         - misc.spec.js
-         - navigation.spec.js
-         - network_requests.spec.js
-         - querying.spec.js
-         - spies_stubs_clocks.spec.js
-         - traversal.spec.js
-         - utilities.spec.js
-         - viewport.spec.js
-         - waiting.spec.js
-         - window.spec.js
-
-     /plugins
-       - index.js
-
-     /support
-       - commands.js
-       - index.js
-   ```
 5. Modificar el archivo `package.json` la propiedad `test` ubicada dentro de la seccion de `scripts` para que quede de la siguiente manera:
    ```javascript
    ...
@@ -157,7 +120,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
 6. Ésto hará que el comando `test:open` ejecute la instrucción `cypress open`. Ejecuta el comando `npm run test:open` para verificar que el demo de cypress ahora se inicia con este comando.
 7. Crear una rama y realizar un commit donde incluya los archivos creados y/o modificados en esta sección, con el mensaje “setup cypress configuration” y subir los cambios al repositorio
 8. Crear un pull request (PR), asignarle los revisores y esperar la aprobación o comentarios de mejora
-9.  Una vez hemos obtenido la aprobación de los revisores, realizar el merge a master seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local 'master' realice el pull para traer los cambios mergeados en el PR.
+9.  Una vez hemos obtenido la aprobación de los revisores, realizar el merge a main seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local 'main' realice el pull para traer los cambios mergeados en el PR.
 
 ## 4. Creando la primera prueba
 
@@ -172,176 +135,224 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
        });
    });
    ```
-2. Ejecutar el comando `npm run test:open` para correr la prueba. Una vez finalice y si todo está bien veremos que la prueba se puso en verde:
-![google spec result](https://github.com/renardete/Cypress-Training-Doc/blob/main/google-spec-result.png).
+2. Ejecutar el comando `npm test` para correr la prueba. Una vez finalice y si todo está bien veremos que la prueba paso satisfactoriamente:  
+
+![google spec result](https://github.com/renardete/Cypress-Workshop/blob/master/media/google_spec_pass.png?raw=true).
 
 ## 5. Configurando las pruebas con Typescript
 
 1. Instalar las dependencias necesarias para la transpilación de nuestras pruebas escritas en Typescript a Javascript por medio de webpack y un preprocesador de cypress para Typescript.
-   ```bash
-   npm i -D webpack @cypress/webpack-preprocessor ts-loader typescript
-   ```
+
+  ```bash
+  npm i -D webpack @cypress/webpack-preprocessor ts-loader typescript
+  ```
 
 2. Crear el archivo tsconfig.json en la raiz del proyecto y copiar dentro de este la siguiente configuración:
-   ```javascript
-   {
-       "compilerOptions": {
-           "target": "es5",
-           "module": "commonjs",
-           "skipLibCheck": true,
-           "strict": true,
-           "types": [
-               "cypress"
-           ]
-       },
-       "include": [
-           "cypress/**/*.ts"
-       ],
-       "exclude": [
-           "node_modules/"
-       ]
-   }
-   ```
+
+```javascript
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "skipLibCheck": true,
+        "strict": true,
+        "types": [
+            "cypress"
+        ]
+    },
+    "include": [
+        "cypress/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules/"
+    ]
+}
+```
 
 3. Posteriormente, crear el archivo de configuración de webpack `webpack.config.js` en la raiz del proyecto y agregar las siguientes lineas para realizar la transpilación de nuestros archivos `.ts` excluyendo las dependencias instaladas en `node_modules`:
-   ```javascript
-   module.exports = {
-       mode: 'development',
-       devtool: 'eval-source-map',
-       resolve: {
-         extensions: ['.ts', '.js'],
-       },
-       module: {
-         rules: [
-           {
-   
-             test: /\.ts$/,
-             exclude: [/node_modules/],
-             use: [
-               {
-                 loader: 'ts-loader',
-                 options: {
-                   transpileOnly: true,
-                 },
-               },
-             ],
-           },
-         ],
-       },
-     }
-   ```
+
+```javascript
+module.exports = {
+    mode: 'development',
+    devtool: 'eval-source-map',
+    resolve: {
+      extensions: ['.ts', '.js'],
+    },
+    module: {
+      rules: [
+        {
+
+          test: /\.ts$/,
+          exclude: [/node_modules/],
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  }
+```
 
 4. Para cargar el plugin del preprocesador en cypress e iniciar la transpilación al correr las pruebas agregamos las siguientes lineas en el archivo `cypress/plugins/index.js`
-   ```javascript
-   /// <reference types="cypress" />
-   
-   const wp = require('@cypress/webpack-preprocessor')
-   
-   /**
-    * @type {Cypress.PluginConfig}
-    */
-   module.exports = (on, config) => {
-     const options = {
-       webpackOptions: require('../../webpack.config'),
-     }
-   
-     on('file:preprocessor', wp(options))
-   }
-   ```
+
+```javascript
+/// <reference types="cypress" />
+
+const wp = require('@cypress/webpack-preprocessor')
+
+/**
+ * @type {Cypress.PluginConfig}
+ */
+module.exports = (on, config) => {
+  const options = {
+    webpackOptions: require('../../webpack.config'),
+  }
+
+  on('file:preprocessor', wp(options))
+}
+```
 
 5. Cambiar la extensión de nuestra prueba `google.spec.js` por `google.spec.ts`y ejecutar el comando de pruebas para comprobar que la transpilación se ejecuta correctamente al correr las pruebas
-   ```bash
-   npm run test:open
-   ```
+
+```bash
+npm test
+```
 
 ## 6. Análisis de código estatico
 
 1. Para realizar el análisis de código estatico usaremos la herramienta EsLint para validar un conjunto de reglas sobre el código de pruebas y mantener un estilo consistente. Para esto se debe instalar Eslint como dependecia de desarrollo, luego iniciar la configuración del linter y seguimos los pasos que aparecen en consola (ver gif):
-   ```bash
-   npm install eslint --save-dev
-   npx eslint --init
-   ```
-   ![google spec result](https://github.com/renardete/Cypress-Training-Doc/blob/main/eslint-config.png).
+
+```bash
+npm install eslint --save-dev
+npx eslint --init
+```
+
+![eslint-config](https://github.com/renardete/Cypress-Workshop/blob/master/media/eslint-configuration.gif?raw=true).  
+
 2. Instalar una extension del linter para cypress que contiene reglas de estilo siguiendo las buenas practicas que sugiere cypress:
-   ```bash
-   npm install eslint-plugin-cypress --save-dev
-   ```
+
+```bash
+npm install eslint-plugin-cypress --save-dev
+```
+
 3. Luego agregar el plugin de cypress y las reglas en el archivo eslintrc.js
-   ```javascript
-   ...
-     plugins: [
-       '@typescript-eslint',
-       "cypress"
-     ],
-     "rules": {
-       "quotes": ["error", "double"],
-       "cypress/no-assigning-return-values": "error",
-       "cypress/no-unnecessary-waiting": "error",
-       "cypress/assertion-before-screenshot": "warn",
-       "cypress/no-force": "warn"
-     },
-     "env": {
-       "cypress/globals": true
-     }
-   ...
-   ```
+
+```javascript
+...
+    "plugins": [
+        "@typescript-eslint",
+        "cypress"
+    ],
+    "rules": {
+        "quotes": ["error", "double"],
+        "cypress/no-assigning-return-values": "error",
+        "cypress/no-unnecessary-waiting": "error",
+        "cypress/assertion-before-screenshot": "warn",
+        "cypress/no-force": "warn"
+    }
+...
+```
+
 4. Posteriormente modificamos el script test:open en el "package.json" para ejecutar la verificación de código estático antes de correr las pruebas:
-   ```json
-   "scripts": {
-       "test:open": "npm run lint && cypress open",
-       "lint": "eslint ./cypress/integration/**/*.ts",
-       "lint:fix": "npm run lint -- --fix"
-   },
-   ```
+
+```json
+"scripts": {
+    "test:open": "npm run lint && cypress open",
+    "lint": "eslint ./cypress/integration/**/*.ts",
+    "lint:fix": "npm run lint -- --fix"
+},
+```
+
 5. Ejecutamos las pruebas por corriendo el comando test:open
-   ```bash
-   npm run test:open
-   ```
-   Nota: En caso de tener errores, algunos de ellos son posible arreglarlos autoáticamente añadiendo el argumento --fix, es decir, usamos `npm run lint -- --fix`.
 
-## 7. Configurar Integración Continua (CI)
+```bash
+npm run test:open
+```
 
-En esta sección se configura la integración continua por medio de Travis, lo cual nos permitirá correr nuestras pruebas en un servidor remoto y validar continuamente que los cambios que vamos a ingresar a nuestra aplicación no han afectado el funcionamiento correcto.
+Nota: En caso de tener errores, algunos de ellos son posible arreglarlos autoáticamente añadiendo el argumento --fix, es decir, usamos `npm run lint -- --fix`.
+
+## 7. Configurar Integracion Continua (CI)
+
+En esta sección se configura la integración continua por medio de Github Actions, lo cual nos permitirá correr nuestras pruebas en un servidor remoto y validar continuamente que los cambios que vamos a ingresar a nuestra aplicación no han afectado su funcionamiento correcto.
 
 1. Inicialmente crear el siguiente script en el package.json para ejecutar todas las pruebas de cypress/integration/ sin tener que levantar el explorador. A esto le llamamos headless mode:
-   ```javascript
-   "scripts": {
-       ...
-       "test": "cypress run"
-       ...
-     },
-   ```
-2. Luego crear el archivo `.nvmrc` para indicarle al CI que versión de nodeJS debe usar para instalar la aplicación y correr las pruebas. Ingresar la versión de node en el archivo.
-   ```text
-   v10.16.0
-   ```
 
-3. Para indicar la configuración de Travis se debe crear el archivo `.travis.yml` e ingresar la siguiente especificación:
-   ```yml
-   language: node_js
+```javascript
+"scripts": {
+    ...
+    "test": "cypress run"
+    ...
+  },
+```
 
-   directories:
-   - node_modules
-   notifications:
-   email: false
-   branches:
-   except:
-   - "/^v\\d+\\.\\d+\\.\\d+$/"
-   script:
-     - npm test
-   ```
-   *Nota: Se agrega el script `npm test` para ejecutar todas las pruebas*
-4. Habilitar en Travis en el repositorio, primeros 3 pasos de [esta guía](https://docs.travis-ci.com/user/getting-started/)
-   ![image](https://user-images.githubusercontent.com/10209180/112709102-6cf8bd00-8e84-11eb-9fa8-e0e6fc01f1f1.png)
+2. Para crear la configuracion del workflow de github actions, vamos a crear un archivo `main.yml` en el directorio `.github/workflows` que realice los siguientes `steps` cuando creamos o actualizamos un Pull Request:
+
+    1. Obtener nuestro repositorio (A esto se le conoce como checkout)
+    2. Preparar el workflow para usar node v16
+    3. Instalar dependencias
+    4. Ejecutar el analisis de codigo estatico
+    5. Ejecutar las pruebas E2E que hemos construido
+
+  *Nota: Intenta construir tu workflow, pero si te bloqueas, abajo tienes una seccion con una posible solucion*
+
+<details>
+<summary><b><u>Mostrar una solucion</u></b></summary>
+
+```yml
+name: Continuous integration
+
+on: [pull_request]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+      
+      - name: Code style
+        run: npm run lint
+
+      - name: UI E2E Tests
+        uses: cypress-io/github-action@v2
+        with:
+          browser: chrome
+          headless: true
+
+``` 
+
+*Nota: El action de cypress ejecuta por default el comando `npm test`*
+
+</details>
+
+
+4. Crea el archivo `.nvmrc` y especifica la version de nodeJS que seas usar para la ejecución.  
+
 5. Debido a que cypress por default graba videos de la ejecución de las pruebas es util desactivar esta funcionalidad para disminuir el tiempo de ejecución y el uso de recursos en el servidor del CI. Para esto se debe ingresar la siguiente configuración en el archivo `cypress.json`
-   ```json
-   {
-     ...
-     "video": false
-     ...
-   }
-   ```
-5. Finalmente subir los cambios al repositorio y crear un Pull Request. Se ejecutaran las pruebas en el servidor que provee Travis y se mostrara los resultados de la ejecución en el PR.
+
+```json
+{
+  ...
+  "video": false
+  ...
+}
+```
+
+6. Finalmente subir los cambios al repositorio y crear un Pull Request. Se ejecutaran las pruebas en el servidor que provee Travis y se mostrara los resultados de la ejecución en el PR.
 
 ## 8 Selectores CSS
 
@@ -349,59 +360,56 @@ En esta sección se realiza un flujo para comprar una camiseta en la tienda de r
 
 :scroll: Un poco de teoria: Para interactuar con los elementos del DOM se pueden usar varios mecanismos como CSS selectors, XPATH, jquery+css. Cada uno de estos tiene diferentes beneficios como su performance, legibilidad o la complejidad de la query del elemento con el cual queremos interactuar. Usualmente los CSS selector suelen ser mas rapidos y confiables en la mayoria de navegadores sin embargo lo XPATH permiten realizar busquedas de elementos mas complejas. Te recomendamos investigar las diferencias entre ambos tipos de selectores teniendo en cuenta factores como: manteniblidad, flexiblidad y velocidad de busqueda de un elemento.
 
-Vamos a automatizar el flujo de compra, que consta de los siguientes pasos:
-1. Abrir la pagina web automation practice
-2. Ir al menu de "T-Shirts"
-3. Agregar la primera blusa al carrito de compra
-4. Click en el boton "Proceed to Checkout" de la ventana emergente
-5. Click en el boton "Proceed to Checkout" de el "Summary"
-6. Escribir el correo
-7. Escribir la contraseña
-8. Click en el boton de "Sign In"
-9. Click en el boton "Proceed to Checkout" del paso en el que se provee la direccion de entrega
-10. Aceptar terminos y condiciones
-11. Click en el boton "Proceed to Checkout" de el paso de Envio
-12. Click en la opcion "Pay by bank wire"
-13. Click en el boton the confirmar orden
-14. Verificar que en el paso final, se muestra el titulo "Your order on My Store is complete."
+Vamos a realizar los siguientes pasos, para automatizar el flujo de compra:
 
-Para automatizar el proceso anterior, vamos a realizar los siguietes pasos:
 1. Primero crear el archivo `buy-shirt.spec.ts` e incluir el siguiente codigo:
-   ```typescript
 
-   describe('Buy a t-shirt', () => {
+```typescript
 
-     it('then the t-shirt should be bought', () => {
-       cy.visit('http://automationpractice.com/')
-       cy.get('#block_top_menu > ul > li:nth-child(3) > a').click()
-       cy.get('#center_column a.button.ajax_add_to_cart_button.btn.btn-default').click()
-       cy.get('[style*="display: block;"] .button-container > a').click()
-       cy.get('.cart_navigation span').click()
+describe('Buy a t-shirt', () => {
 
-       cy.get('#email').type('aperdomobo@gmail.com')
-       cy.get('#passwd').type('WorkshopProtractor')
+  it('then the t-shirt should be bought', () => {
+    cy.visit('http://automationpractice.com/')
+    cy.get('#block_top_menu > ul > li:nth-child(3) > a').click()
+    cy.get('#center_column a.button.ajax_add_to_cart_button.btn.btn-default').click()
+    cy.get('[style*="display: block;"] .button-container > a').click()
+    cy.get('.cart_navigation span').click()
 
-       // Debes completar la prueba ... implementa los pasos 8 al 13, del proceso de compra
+    cy.get('#email').type('aperdomobo@gmail.com')
+    cy.get('#passwd').type('WorkshopProtractor')
 
-       cy.get('#center_column > div > p > strong')
-         .should('have.text', 'Your order on My Store is complete.')
-     });
-   });
-   ```
-   Usa como apoyo las siguientes imagenes para conocer mas del flujo esperado, extrae los selectores de la UI manualmente, termina la prueba y correla local.
-   Pasos a implementar:
-   ![pasos-a-implementar](https://github.com/renardete/Cypress-Training-Doc/blob/main/guia-implementacion.png)
-   Proceso de Compra:
-   ![gif-proceso-compra](https://github.com/renardete/Cypress-Training-Doc/blob/main/proceso-compra.gif)
+    // Debes completar la prueba ...
+
+    cy.get('#center_column > div > p > strong')
+      .should('have.text', 'Your order on My Store is complete.')
+  });
+});
+```
+
+El flujo que debes continuar es:
+  - Seccion Address: Continuar el checkout
+  - Seccion Shipping:
+    - Aceptar terminos y condiciones 
+    - luego continuar el checkout
+  - Seccion Payment:
+    - click en pay by bank wire
+    - confirmar orden
+
+Usa como apoyo el gif para conocer mas del flujo esperado, extrae los css selector de la UI manualmente, termina la prueba y correla local.    
+
+![buy-shirt-flow](https://github.com/renardete/Cypress-Workshop/blob/master/media/buy-tshirt-flow.gif?raw=true)
+
 3. En algunos la red u otros factores externos a la prueba pueden afectar los tiempos de espera, en el archivo de configuración de cypress `cypress.json` agrega los siguientes atributos y modificalos hasta que las pruebas pasen:
-   ```json
-   {
-     ...
-       "defaultCommandTimeout": 20000,
-       "responseTimeout": 20000
-     ...
-   }
-   ```
+
+```json
+{
+  ...
+    "defaultCommandTimeout": 20000,
+    "responseTimeout": 20000
+  ...
+}
+```
+
 4. Para finalizar sube tus cambios al repositorio y crea un PR.
 
 ## 9 Page Object Model (POM)
@@ -411,57 +419,63 @@ Page Object Model es un patron para mejorar la mantenibilidad de las pruebas ya 
 A continuación realizar la transformación a POM, por medio de los siguientes pasos:
 
 1. Crear el archivo `cypress/page/menu-content.page.ts` y agregar el siguiente código:
-   ```javascript
-   class MenuContentPage {
-       private tShirtMenu: string;
-       private menuContentPageURL: string
 
-       constructor() {
-           this.tShirtMenu = '#block_top_menu > ul > li:nth-child(3) > a';
-           this.menuContentPageURL = 'http://automationpractice.com/'
-       }
+```javascript
+class MenuContentPage {
+    private tShirtMenu: string;
+    private menuContentPageURL: string
 
-       public visitMenuContentPage(): void {
-           cy.visit(this.menuContentPageURL)
-       }
+    constructor() {
+        this.tShirtMenu = '#block_top_menu > ul > li:nth-child(3) > a';
+        this.menuContentPageURL = 'http://automationpractice.com/'
+    }
 
-       public goToTShirtMenu(): void {
-           cy.get(this.tShirtMenu).click()
-       }
+    public visitMenuContentPage(): void {
+        cy.visit(this.menuContentPageURL)
+    }
 
-   }
-   export { MenuContentPage }
-   ```
+    public goToTShirtMenu(): void {
+        cy.get(this.tShirtMenu).click()
+    }
+
+}
+export { MenuContentPage }
+```
 
 2. Posteriormente crear el archivo `cypress/page/index.js` para usar como archivo de salida de todos los page object:
-   ```javascript
-   export { MenuContentPage } from './menu-content.page'
 
-   ```
+```javascript
+export { MenuContentPage } from './menu-content.page'
+
+```
 
 3. Luego modificar el archivo `buy-tshirt.spec.ts` para utilizar el POM que acabamos de crear en la prueba:
-   ```javascript
-   import { MenuContentPage } from '../page/index'
 
-   const menuContentPage = new MenuContentPage()
+```javascript
+import { MenuContentPage } from '../page/index'
 
-   describe('Buy a t-shirt', () => {
+const menuContentPage = new MenuContentPage()
 
-     it('then should be bought a t-shirt', () => {
-       menuContentPage.visitMenuContentPage()
-       menuContentPage.goToTShirtMenu()
-       cy.get('[style*="display: block;"] .button-container > a').click()
-       cy.get('.cart_navigation span').click()
+describe('Buy a t-shirt', () => {
 
-       // El resto del flujo de la prueba....
+  it('then should be bought a t-shirt', () => {
+    menuContentPage.visitMenuContentPage()
+    menuContentPage.goToTShirtMenu()
+    cy.get('[style*="display: block;"] .button-container > a').click()
+    cy.get('.cart_navigation span').click()
 
-     });
-   });
-   ```
+    // El resto del flujo de la prueba....
+
+  });
+});
+```
 
 4. Posteriormente, crear el resto de page object y reemplazarlos en la prueba. Los nombres de los page object son: **products-list.page.ts**, **shoping-cart.page.ts**, **login.page.ts**, **address-step.page.ts**, **shipping-step.page.ts** y **payment-step.page.ts**
-   `tip:` Agrega los page object al archivo 'page/index.ts' para facilitar el import de cada page object en las pruebas.
+
+`tip:` Agrega los page object al archivo 'page/index.ts' para facilitar el import de cada page object en las pruebas.
+
 5. Ejecute las pruebas y verifica que pasen. Si alguna falla modificala usando los css locators y el tiempo de espera configurado hasta que pasen.
+
 6. Cree un PR y solicitie revisión del punto anterior.
 
 ## 10. Mejorando los selectores
@@ -543,8 +557,8 @@ describe('the user navigates to the dresses page should', () => {
    2. Action: Navega al menu de vestidos donde se carga la lista de vestidos diponibles.
    3. Assert: Verifica que se visualicen 5 vestidos y que tengan los nombres esperados (el orden es importante).
 
-`tip:` Recuerda aplicar los Page Object al construir la prueba.
-`Challenge:` Investiga como funciona los métodos **validate** en el archivo `dresses-list.page.ts`.
+`tip:` Recuerda aplicar los Page Object al construir la prueba.  
+`Challenge:` Investiga como funciona los métodos **validate** en el archivo `dresses-list.page.ts`.  
 
 4. Actualiza la prueba de comprar tshirt en el archivo `buy-tshirt.spec.ts` para que siga el patrón AAA.
 
@@ -727,3 +741,14 @@ Te invitamos a seguir aprendiendo, y te dejamos unos temas para que investigues 
 * Contract Tests
 
 Sigue aprendiendo! :smile: :book:
+
+## Challenges:  
+
+Hay muchos temas que puedes seguir aprendiendo y herramientas que puedes incluir, estos son algunos de los Retos que te dejamos :smiley:  
+
+### Given - When - Then  
+
+Otro estilo de escritura de pruebas muy similar al patron AAA que ya aprendimos es el Given-When-Then, aqui te dejamos un blog para que inicies tu estudio de este estilo y un link a una libreria para que lo lleves a la practica:  
+
+- [Blog - Martin Fowler](https://martinfowler.com/bliki/GivenWhenThen.html)
+- [Libreria - Cucumber for cypress](https://www.npmjs.com/package/cypress-cucumber-preprocessor)
