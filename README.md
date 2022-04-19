@@ -63,9 +63,10 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    * [holgiosalos](https://github.com/holgiosalos)
    * [Valeryibarra](https://github.com/Valeryibarra)
    * [renardete](https://github.com/renardete)
+   * [aperdomob](https://github.com/aperdomob)
 
 ## 2. Configuracion inicial del proyecto
-1. Instalar la versión `v14.16.0` de NodeJS. Nota: Recomendamos usar [nvm](https://github.com/nvm-sh/nvm) como manejador de versiones.
+1. Instalar la versión `v16.14.0` de NodeJS. Nota: Recomendamos usar [nvm](https://github.com/nvm-sh/nvm) como manejador de versiones.
 2. Crear una nueva rama local ejecutando por consola `git checkout -b setup`.
 3. Crear una carpeta en la raíz del proyecto llamada **.github** con un archivo llamado **CODEOWNERS** (sin extensión) con lo siguiente:
    ```js
@@ -90,7 +91,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
    git push origin setup
    ```
 5. Crear un pull request (PR), asignarle los revisores y esperar la aprobación o comentarios de mejora (en este caso deberá hacer los ajustes requeridos, subir los cambios y esperar nuevamente la aprobación) de los revisores . Si no sabe cómo realizarlo, le recomendamos leer el siguiente artículo [instrucciones](https://help.github.com/articles/creating-a-pull-request/).
-6. Una vez hemos obtenido la aprobación de los revisores, realizar el merge a main seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local 'main' realice el pull para traer los cambios mergeados en el PR.
+6. Una vez hemos obtenido la aprobación de los revisores, realizar el merge a main seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local "main" realice el pull para traer los cambios mergeados en el PR.
    ```bash
    git checkout main
    git pull
@@ -120,7 +121,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
 6. Ésto hará que el comando `test:open` ejecute la instrucción `cypress open`. Ejecuta el comando `npm run test:open` para verificar que el demo de cypress ahora se inicia con este comando.
 7. Crear una rama y realizar un commit donde incluya los archivos creados y/o modificados en esta sección, con el mensaje “setup cypress configuration” y subir los cambios al repositorio
 8. Crear un pull request (PR), asignarle los revisores y esperar la aprobación o comentarios de mejora
-9.  Una vez hemos obtenido la aprobación de los revisores, realizar el merge a main seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local 'main' realice el pull para traer los cambios mergeados en el PR.
+9.  Una vez hemos obtenido la aprobación de los revisores, realizar el merge a main seleccionando la opción “squash and merge” (squash te permite unir todos los commits en un solo, es más por un concepto de organización). Posteriormente, en su rama local "main" realice el pull para traer los cambios mergeados en el PR.
 
 ## 4. Creando la primera prueba
 
@@ -128,10 +129,10 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
 
 1. Creamos un archivo llamado `google.spec.js` dentro de la carpeta `/cypress/integration/` con el siguiente contenido:
    ```javascript
-   describe('This is my first cypress test', () => {
-       it('should have a title', () => {
-           cy.visit('https://www.google.com/');
-           cy.title().should('eq', 'Google');
+   describe("This is my first cypress test", () => {
+       it("should have a title", () => {
+           cy.visit("https://www.google.com/");
+           cy.title().should("eq", "Google");
        });
    });
    ```
@@ -141,10 +142,10 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
 
 ## 5. Configurando las pruebas con Typescript
 
-1. Instalar las dependencias necesarias para la transpilación de nuestras pruebas escritas en Typescript a Javascript por medio de webpack y un preprocesador de cypress para Typescript.
+1. Instalar las dependencias necesarias para la transpilación de nuestras pruebas escritas en Typescript a Javascript por medio de la instalacion de la dependencia de typescript.
 
   ```bash
-  npm i -D webpack @cypress/webpack-preprocessor ts-loader typescript
+  npm install --save-dev typescript
   ```
 
 2. Crear el archivo tsconfig.json en la raiz del proyecto y copiar dentro de este la siguiente configuración:
@@ -153,11 +154,12 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "commonjs",
         "skipLibCheck": true,
         "strict": true,
+        "lib": ["es5", "dom"],
         "types": [
-            "cypress"
+            "cypress",
+            "node"
         ]
     },
     "include": [
@@ -166,54 +168,6 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
     "exclude": [
         "node_modules/"
     ]
-}
-```
-
-3. Posteriormente, crear el archivo de configuración de webpack `webpack.config.js` en la raiz del proyecto y agregar las siguientes lineas para realizar la transpilación de nuestros archivos `.ts` excluyendo las dependencias instaladas en `node_modules`:
-
-```javascript
-module.exports = {
-    mode: 'development',
-    devtool: 'eval-source-map',
-    resolve: {
-      extensions: ['.ts', '.js'],
-    },
-    module: {
-      rules: [
-        {
-
-          test: /\.ts$/,
-          exclude: [/node_modules/],
-          use: [
-            {
-              loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
-              },
-            },
-          ],
-        },
-      ],
-    },
-  }
-```
-
-4. Para cargar el plugin del preprocesador en cypress e iniciar la transpilación al correr las pruebas agregamos las siguientes lineas en el archivo `cypress/plugins/index.js`
-
-```javascript
-/// <reference types="cypress" />
-
-const wp = require('@cypress/webpack-preprocessor')
-
-/**
- * @type {Cypress.PluginConfig}
- */
-module.exports = (on, config) => {
-  const options = {
-    webpackOptions: require('../../webpack.config'),
-  }
-
-  on('file:preprocessor', wp(options))
 }
 ```
 
@@ -245,16 +199,19 @@ npm install eslint-plugin-cypress --save-dev
 ```javascript
 ...
     "plugins": [
-        "@typescript-eslint",
-        "cypress"
+      "@typescript-eslint",
+      "cypress"
     ],
     "rules": {
-        "quotes": ["error", "double"],
-        "cypress/no-assigning-return-values": "error",
-        "cypress/no-unnecessary-waiting": "error",
-        "cypress/assertion-before-screenshot": "warn",
-        "cypress/no-force": "warn"
-    }
+      "quotes": ["error", "double"],
+      "cypress/no-assigning-return-values": "error",
+      "cypress/no-unnecessary-waiting": "error",
+      "cypress/assertion-before-screenshot": "warn",
+      "cypress/no-force": "warn",
+      "no-unused-vars": "warn",
+      "require-jsdoc": "warn",
+      "max-len": [ "error", { "code": 120 } ]
+    },
 ...
 ```
 
@@ -280,7 +237,7 @@ Nota: En caso de tener errores, algunos de ellos son posible arreglarlos autoát
 
 En esta sección se configura la integración continua por medio de Github Actions, lo cual nos permitirá correr nuestras pruebas en un servidor remoto y validar continuamente que los cambios que vamos a ingresar a nuestra aplicación no han afectado su funcionamiento correcto.
 
-1. Inicialmente crear el siguiente script en el package.json para ejecutar todas las pruebas de cypress/integration/ sin tener que levantar el explorador. A esto le llamamos headless mode:
+1. Inicialmente crear el siguiente script en el package.json para ejecutar todas las pruebas de cypress/integration/ sin tener que levantar la interfaz grafica del explorador. A esto le llamamos "headless mode":
 
 ```javascript
 "scripts": {
@@ -340,14 +297,15 @@ jobs:
 </details>
 
 
-4. Crea el archivo `.nvmrc` y especifica la version de nodeJS que seas usar para la ejecución.  
+4. Crea el archivo `.nvmrc` y especifica la version de nodeJS que seas usar para la ejecución.
 
-5. Debido a que cypress por default graba videos de la ejecución de las pruebas es util desactivar esta funcionalidad para disminuir el tiempo de ejecución y el uso de recursos en el servidor del CI. Para esto se debe ingresar la siguiente configuración en el archivo `cypress.json`
+5. Debido a que cypress por default graba videos de la ejecución de las pruebas es util desactivar esta funcionalidad para disminuir el tiempo de ejecución y el uso de recursos en el servidor del CI. Adicionalmente, desactivaremos temporalmente las capturas de pantalla debido a un [error](https://github.com/cypress-io/cypress/issues/5016) que aun no ha sido solucionado en las versiones recientes de cypress. Para esto se debe ingresar la siguiente configuración en el archivo `cypress.json`
 
 ```json
 {
   ...
-  "video": false
+  "video": false,
+  "screenshotOnRunFailure": false
   ...
 }
 ```
@@ -366,22 +324,22 @@ Vamos a realizar los siguientes pasos, para automatizar el flujo de compra:
 
 ```typescript
 
-describe('Buy a t-shirt', () => {
+describe("Buy a t-shirt", () => {
 
-  it('then the t-shirt should be bought', () => {
-    cy.visit('http://automationpractice.com/')
-    cy.get('#block_top_menu > ul > li:nth-child(3) > a').click()
-    cy.get('#center_column a.button.ajax_add_to_cart_button.btn.btn-default').click()
-    cy.get('[style*="display: block;"] .button-container > a').click()
-    cy.get('.cart_navigation span').click()
+  it("then the t-shirt should be bought", () => {
+    cy.visit("http://automationpractice.com/")
+    cy.get("#block_top_menu > ul > li:nth-child(3) > a").click()
+    cy.get("#center_column a.button.ajax_add_to_cart_button.btn.btn-default").click()
+    cy.get("[style*="display: block;"] .button-container > a").click()
+    cy.get(".cart_navigation span").click()
 
-    cy.get('#email').type('aperdomobo@gmail.com')
-    cy.get('#passwd').type('WorkshopProtractor')
+    cy.get("#email").type("aperdomobo@gmail.com")
+    cy.get("#passwd").type("WorkshopProtractor")
 
     // Debes completar la prueba ...
 
-    cy.get('#center_column > div > p > strong')
-      .should('have.text', 'Your order on My Store is complete.')
+    cy.get("#center_column > div > p > strong")
+      .should("have.text", "Your order on My Store is complete.")
   });
 });
 ```
@@ -426,8 +384,8 @@ class MenuContentPage {
     private menuContentPageURL: string
 
     constructor() {
-        this.tShirtMenu = '#block_top_menu > ul > li:nth-child(3) > a';
-        this.menuContentPageURL = 'http://automationpractice.com/'
+        this.tShirtMenu = "#block_top_menu > ul > li:nth-child(3) > a";
+        this.menuContentPageURL = "http://automationpractice.com/"
     }
 
     public visitMenuContentPage(): void {
@@ -445,24 +403,24 @@ export { MenuContentPage }
 2. Posteriormente crear el archivo `cypress/page/index.js` para usar como archivo de salida de todos los page object:
 
 ```javascript
-export { MenuContentPage } from './menu-content.page'
+export { MenuContentPage } from "./menu-content.page"
 
 ```
 
 3. Luego modificar el archivo `buy-tshirt.spec.ts` para utilizar el POM que acabamos de crear en la prueba:
 
 ```javascript
-import { MenuContentPage } from '../page/index'
+import { MenuContentPage } from "../page/index"
 
 const menuContentPage = new MenuContentPage()
 
-describe('Buy a t-shirt', () => {
+describe("Buy a t-shirt", () => {
 
-  it('then should be bought a t-shirt', () => {
+  it("then should be bought a t-shirt", () => {
     menuContentPage.visitMenuContentPage()
     menuContentPage.goToTShirtMenu()
-    cy.get('[style*="display: block;"] .button-container > a').click()
-    cy.get('.cart_navigation span').click()
+    cy.get("[style*="display: block;"] .button-container > a").click()
+    cy.get(".cart_navigation span").click()
 
     // El resto del flujo de la prueba....
 
@@ -472,7 +430,7 @@ describe('Buy a t-shirt', () => {
 
 4. Posteriormente, crear el resto de page object y reemplazarlos en la prueba. Los nombres de los page object son: **products-list.page.ts**, **shoping-cart.page.ts**, **login.page.ts**, **address-step.page.ts**, **shipping-step.page.ts** y **payment-step.page.ts**
 
-`tip:` Agrega los page object al archivo 'page/index.ts' para facilitar el import de cada page object en las pruebas.
+`tip:` Agrega los page object al archivo "page/index.ts" para facilitar el import de cada page object en las pruebas.
 
 5. Ejecute las pruebas y verifica que pasen. Si alguna falla modificala usando los css locators y el tiempo de espera configurado hasta que pasen.
 
@@ -507,7 +465,7 @@ class DressesListPage {
   private dressName: string;
 
   constructor(){
-    this.dressItem = '.product-container'
+    this.dressItem = ".product-container"
     this.dressName = `${this.dressItem} .product-name`
   }
 
@@ -516,12 +474,12 @@ class DressesListPage {
   }
 
   validateItemsNumber(itemsNumber: number){
-    cy.get(this.dressItem).should('have.length', itemsNumber)
+    cy.get(this.dressItem).should("have.length", itemsNumber)
   }
 
   validateItemsNames(names: string[]){
     cy.get(this.dressName).each((item, index) => {
-      cy.wrap(item).should('contain.text', names[index])
+      cy.wrap(item).should("contain.text", names[index])
     })
   }
 
@@ -533,10 +491,10 @@ export {DressesListPage}
 2. Creamos el archivo `dresses-list.spec.ts` para realizar la prueba de la lista de vestidos.
 
 ```javascript
-import { MenuContentPage, DressesListPage } from '../page/index'
+import { MenuContentPage, DressesListPage } from "../page/index"
 
 
-describe('the user navigates to the dresses page should', () => {
+describe("the user navigates to the dresses page should", () => {
 
   let menuContentPage: MenuContentPage;
   let dressesListPage: DressesListPage;
@@ -546,7 +504,7 @@ describe('the user navigates to the dresses page should', () => {
     dressesListPage = new DressesListPage();
   })
 
-  it('show the available dresses', () => {
+  it("show the available dresses", () => {
     // ... realiza la prueba
   })
 })
@@ -572,7 +530,7 @@ En algunos escenarios debemos trabajar con lista de elementos, realizar busqueda
 
 2. Cree un método privado llamado `findProductByName` el cual debe retornar el contenedor (elemento html) del producto cuyo nombre se pasa por parametro. Puedes basarte en el comando **filter** de cypres, revisa la api de Cypress: [API de cypress](https://docs.cypress.io/api/api/table-of-contents.html)
 
-3. Modifica el método `addTShirtToCart()` para que reciba por parametro el nombre del producto. Usa el método creado previamente para darle click al boton de 'Add to Cart' del producto. Puedes revisar el comando **find** the cypress.
+3. Modifica el método `addTShirtToCart()` para que reciba por parametro el nombre del producto. Usa el método creado previamente para darle click al boton de "Add to Cart" del producto. Puedes revisar el comando **find** the cypress.
 
 4. Ejecuta las pruebas y verifica que pasen :heavy_check_mark:
 
@@ -585,8 +543,7 @@ Algunas veces es bueno mejorar el reporte visual de la ejecución de nuestras pr
 1. Instalaremos las siguientes dependencias:
 
 ```bash
-npm install mocha --save-dev
-npm install mocha --save-dev
+npm install mocha mochawesome cypress-mochawesome-reporter --save-dev
 
 // Para mantenr el reporte actual (en la terminal) y agregar mochawesome
 npm install cypress-multi-reporters --save-dev
@@ -643,13 +600,13 @@ Usualmente en las aplicaciones nos encontramos formularios que los usuarios debe
 
 ```javascript
 const personalInformation = {
-      name: 'Holmes',
-      lastName: 'Salazar',
-      email: 'hibarras@email.com',
-      gender: 'Male',
-      mobileNumber: '3656589156',
-      hobbies: ['Music', 'Reading'],
-      currentAddress: 'Av siempreViva # 123',
+      name: "Holmes",
+      lastName: "Salazar",
+      email: "hibarras@email.com",
+      gender: "Male",
+      mobileNumber: "3656589156",
+      hobbies: ["Music", "Reading"],
+      currentAddress: "Av siempreViva # 123",
     }
 personalFormPage.fillForm(personalInformation)
 ```
@@ -742,11 +699,11 @@ Te invitamos a seguir aprendiendo, y te dejamos unos temas para que investigues 
 
 Sigue aprendiendo! :smile: :book:
 
-## Challenges:  
+## Challenges:
 
 Hay muchos temas que puedes seguir aprendiendo y herramientas que puedes incluir, estos son algunos de los Retos que te dejamos :smiley:  
 
-### Given - When - Then  
+### Given - When - Then
 
 Otro estilo de escritura de pruebas muy similar al patron AAA que ya aprendimos es el Given-When-Then, aqui te dejamos un blog para que inicies tu estudio de este estilo y un link a una libreria para que lo lleves a la practica:  
 
