@@ -58,7 +58,7 @@ Ten en cuenta tener estudiados ciertos conceptos importantes (te dejamos unos en
 5. Proteger la rama `main` para que los pull request requieran revisión de otros desarrolladores y se compruebe el estado de nuestros test ("ok" :heavy_check_mark: o "fallaron" :x:) antes de hacer un merge a la rama.
 
    Ir a Settings > Branches adicionamos una regla dando click en **add rule**. Escribimos `main` en el campo de **branch name pattern**. Una vez hecho eso, damos click en las siguientes opciones:
-![branch rules](https://github.com/renardete/Cypress-Training-Doc/blob/master/media/branch_protection_configuration.png?raw=true)
+![branch rules](media/branch_protection_configuration.png)
 6. Añadir como colaboradores a:
    * [holgiosalos](https://github.com/holgiosalos)
    * [Valeryibarra](https://github.com/Valeryibarra)
@@ -138,9 +138,9 @@ Una vez hemos ejecutado las pruebas de ejemplo, eliminamos la carpeta `examples`
    ```
 2. Ejecutar el comando `npm test` para correr la prueba. Una vez finalice y si todo está bien veremos que la prueba paso satisfactoriamente:  
 
-![google spec result console](https://github.com/renardete/Cypress-Training-Doc/blob/master/media/google_spec_pass.png?raw=true)
+![google spec result console](media/google_spec_pass.png)
 
-![google spec result browser](https://github.com/renardete/Cypress-Training-Doc/blob/master/media/google-spec-result.png?raw=true)
+![google spec result browser](media/google-spec-result.png)
 
 ## 5. Configurando las pruebas con Typescript
 
@@ -188,7 +188,7 @@ npm install eslint --save-dev
 npx eslint --init
 ```
 
-![eslint-config](https://github.com/renardete/Cypress-Training-Doc/blob/master/media/eslint-configuration.gif?raw=true).  
+![eslint-config](media/eslint-configuration.gif).  
 
 2. Instalar una extension del linter para cypress que contiene reglas de estilo siguiendo las buenas practicas que sugiere cypress:
 
@@ -355,11 +355,11 @@ El flujo que debes continuar es:
     - click en pay by bank wire
     - confirmar orden
 
-![implementation-guide](https://github.com/renardete/Cypress-Training-Doc/blob/master/media/implementation-guide.png?raw=true)
+Usa como apoyo las siguientes imagenes para conocer mas del flujo esperado, extrae los css selector de la UI manualmente, termina la prueba y correla local.    
 
-Usa como apoyo el gif para conocer mas del flujo esperado, extrae los css selector de la UI manualmente, termina la prueba y correla local.    
+![implementation-guide](media/implementation-guide.png)
 
-![buy-shirt-flow](https://github.com/renardete/Cypress-Training-Doc/blob/master/media/buy-tshirt-flow.gif?raw=true)
+![buy-shirt-flow](media/buy-tshirt-flow.gif)
 
 3. En algunos la red u otros factores externos a la prueba pueden afectar los tiempos de espera, en el archivo de configuración de cypress `cypress.json` agrega los siguientes atributos y modificalos hasta que las pruebas pasen:
 
