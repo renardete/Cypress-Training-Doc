@@ -1,0 +1,48 @@
+---
+###########################
+###########################
+## Markdown Linter rules ##
+###########################
+###########################
+
+# Linter rules doc:
+# - https://github.com/DavidAnson/markdownlint
+#
+# Note:
+# To comment out a single error:
+#   <!-- markdownlint-disable -->
+#   any violations you want
+#   <!-- markdownlint-restore -->
+#
+
+###############
+# Rules by id #
+###############
+MD004: true                   # Unordered list style
+MD007:
+  indent: 2                   # Unordered list indentation
+MD013:
+  line_length: 715            # Line length 80 is far to short
+MD026:
+  punctuation: ".,;:!。，；:"  # List of not allowed
+MD029: true                   # Ordered list item prefix
+MD033: false                  # Allow inline HTML
+MD036: true                   # Emphasis used instead of a heading
+
+#################
+# Rules by tags #
+#################
+blank_lines: true             # Error on blank lines
+blanks-around-lists: true
+blanks-around-headers: true
+blanks-around-fences: true
+emphasis-style: true
+ol-prefix: true
+no-emphasis-as-header: true
+no-multiple-blanks: true
+ul-style: true
+fenced-code-language: true
+list-marker-space: true
+no-trailing-spaces: true
+ul-indent: true
+no-trailing-punctuation: true
