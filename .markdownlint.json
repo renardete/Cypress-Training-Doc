@@ -1,0 +1,19 @@
+{
+  "MD013": {
+    "line_length": 715
+  },
+  "blanks-around-lists": true,
+  "blanks-around-headers": true,
+  "blanks-around-fences": true,
+  "emphasis-style": true,
+  "ol-prefix": true,
+  "no-emphasis-as-header": true,
+  "no-inline-html": false,
+  "no-multiple-blanks": true,
+  "ul-style": true,
+  "fenced-code-language": true,
+  "list-marker-space": true,
+  "no-trailing-spaces": true,
+  "ul-indent": true,
+  "no-trailing-punctuation": true
+}
